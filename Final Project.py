@@ -111,7 +111,7 @@ class game:
             self.game_active = False
 
 
-#this function handles all the input validations. It takes a guess as input and returns either true or false
+#this function handles all the guess validations. It takes a guess as input and returns either true or false
 def validate_input(guess):
     if not guess.isdigit(): #use built in method to filter out things like negatives
         return False
@@ -128,10 +128,10 @@ def validate_input(guess):
 
 
 #this function is for prompting the user to select the difficulty level and setting the difficulty attribute
-#it takes no inputs and returns the string from the dictionary so it can be 
+#it takes no inputs and returns the string from the dictionary
 def select_difficulty():
     difficulty_options = {"1": "Easy","2": "Medium","3": "Hard"} #dictionary to hold the levels
-    print("Select a difficulty level with the associated number")
+    print("Select a difficulty level with the associated number, then hit enter to start. Do not use any spaces.")
     print("1. Easy")
     print("2. Medium")
     print("3. Hard")
@@ -145,25 +145,32 @@ def select_difficulty():
 #this function contains the main loop that runs while the game is being played
 #it takes no inputs and returns nothing
 def main_run_game():
-    input('Welcome to the Number Guessing Game! Press Enter to start the game.')
-    this_game = game() # create a game object
-    this_game.difficulty = select_difficulty() #call the select difficulty function to save it into the attribute
-    while this_game.game_active: #continue to guess until the game ends
-        guess = input("Enter a postive integer guess from 1 to 100: ")
-        
-        if validate_input(guess):
-            guess2 =int(guess) #if the input is valid then we can convert into an int safely then pass to makeguess
+    continue_game = True #set the flag to true to enter the loop
+    while continue_game: #adding this outer loop adds the replay functionality
+        input('Welcome to the Number Guessing Game! Press Enter to start the game.')
+        this_game = game() # create a game object
+        this_game.difficulty = select_difficulty() #call the select difficulty function to save it into the attribute
+        while this_game.game_active: #continue to guess until the game ends
+            guess = input("Enter a postive integer guess from 1 to 100: ")
             
-            #select the right method to run based on the difficulty level selected by the user
-            if this_game.difficulty =="Medium":
-                this_game.make_guess_medium_diff(guess2)
-            if this_game.difficulty =="Easy":
-                this_game.make_guess_easy_diff(guess2)
-            if this_game.difficulty =="Hard":
-                this_game.make_guess_hard_diff(guess2)
+            if validate_input(guess):
+                guess2 =int(guess) #if the input is valid then we can convert into an int safely then pass to makeguess
+                
+                #select the right method to run based on the difficulty level selected by the user
+                if this_game.difficulty =="Medium":
+                    this_game.make_guess_medium_diff(guess2)
+                if this_game.difficulty =="Easy":
+                    this_game.make_guess_easy_diff(guess2)
+                if this_game.difficulty =="Hard":
+                    this_game.make_guess_hard_diff(guess2)
 
-        else:
-            print("Your input is not valid, please try again.")
+            else:
+                print("Your input is not valid, please try again.")
+
+        replay = input("Do you want to play again? Enter y or n: ")
+        if replay.lower()!= 'y': #if the input is n or anything other than y, end the first loop
+            print("The game has ended.")
+            continue_game = False #set the outer loop flag to false
 
 
 if __name__ == "__main__": #this code starts a game when your run the file
